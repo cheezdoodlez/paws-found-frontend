@@ -1,3 +1,6 @@
+import { useState, useEffect } from 'react'
+
+
 const AdoptionForm = () => {
     // Step 1: Declare state variables for each field
     const [name, setName] = useState("");
@@ -39,7 +42,7 @@ const AdoptionForm = () => {
     };
   
     return (
-      <form className="adoption" onSubmit={handleSubmit}>
+      <form className="petInfo" onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>
         <input
           id="name"
