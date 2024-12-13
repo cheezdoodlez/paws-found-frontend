@@ -4,6 +4,7 @@ import { findPets, test } from './assets/services/Pets'
 import './App.css'
 import PetSearch from './assets/components/PetsSearch'
 
+
 const App = () => {
   const onSearch = (query) => findPets(query)
   return (
