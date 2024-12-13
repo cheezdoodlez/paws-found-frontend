@@ -6,27 +6,11 @@ import PetSearch from './assets/components/PetsSearch'
 import AdoptionForm from './assets/components/Adoption'
 
 
-const App = () => {
-  const onSearch = (query) => findPets(query)
 
-  return (
-    <>
-    <PetSearch onSearch={onSearch}/>
-        <button onClick={test}>Test me</button>
-      <h1>Paws and Found</h1>
-      <h2>Did you lose your pet? <br />
-        Did you find a pet? <br />
-      </h2>
-    <div>
-      <h1>Adoption Form</h1>
-    <AdoptionForm/>
-    </div>
-
-      </>)
       
-}
+// }
 
 
-      //will start making forms when we have more structure for backend
-      // toggling between lists for indexing data
-      export default App
+//       //will start making forms when we have more structure for backend
+//       // toggling between lists for indexing data
+//       export default App
