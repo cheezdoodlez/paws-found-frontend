@@ -28,10 +28,6 @@ const AdoptionForm = () => {
         if (response.ok) {
           alert("Pet added successfully!");
           // Reset form fields after a successful submission
-          setName('');
-          setBreed('');
-          setColor('');
-          setImage('');
           
         } else {
           alert("Error adding pet. Please try again.");
