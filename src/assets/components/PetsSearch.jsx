@@ -8,7 +8,7 @@ function PetSearch({ onSearch }) {
       onSearch(input);
     };
     return (
-        <form className="adoption" onSubmit={handleSubmit}> 
+        <form className="petReq" onSubmit={handleSubmit}> 
       <label htmlFor="name">Name</label>
       <input id="name" type="text" value={input} 
              onChange={(event) => setInput(event.target.value)}

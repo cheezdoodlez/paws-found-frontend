@@ -14,8 +14,8 @@ const App = () => {
       <h2>Did you lose your pet? <br />
         Did you find a pet? <br />
       </h2>
-      {/* form for adoption */}
-      <form className="adoption">
+      {/* form for adoption/reports */}
+      <form className="petInfo">
         <label htmlFor="name">Name</label>
         <input id="name" type="text" />
 
@@ -28,7 +28,7 @@ const App = () => {
         <label htmlFor="image">Picture</label>
         <input id="image" type="text" />
 
-        <input type="submit" value="Relinquish"/>
+        <button type="submit" >Upload</button>
         </form>
       </>)
       
