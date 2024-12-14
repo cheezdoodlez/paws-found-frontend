@@ -19,7 +19,7 @@ const App = () => {
       </h2>
     <div>
       <h1>Adoption Form</h1>
-    <PetForm/>
+    <AdoptionForm/>
     </div>
 
       </>)
