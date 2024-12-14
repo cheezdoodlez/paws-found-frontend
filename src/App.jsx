@@ -3,7 +3,7 @@ import axios from 'axios'
 import { findPets, test } from './assets/services/Pets'
 import './App.css'
 import PetSearch from './assets/components/PetsSearch'
-import AdoptionForm from './assets/components/Adoption'
+import PetForm from './assets/components/Form'
 
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
       </h2>
     <div>
       <h1>Adoption Form</h1>
-    <AdoptionForm/>
+    <PetForm/>
     </div>
 
       </>)

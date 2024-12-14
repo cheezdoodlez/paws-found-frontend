@@ -1,12 +1,16 @@
+import { use } from 'react';
 import { useState, useEffect } from 'react'
 
 
-const AdoptionForm = () => {
+const PetForm = () => {
     // Step 1: Declare state variables for each field
+    const [formType, setFormType] = useState("adoption")
     const [name, setName] = useState("");
     const [breed, setBreed] = useState("");
     const [color, setColor] = useState("");
     const [image, setImage] = useState("");
+    const [lastSeenLocation, setLastSeenLocation] = useState("")
+    const [dateLastSeen, setDateLastSeen] = useState("")
   
     // Step 2: Handle form submission
     const handleSubmit = async (e) => {
@@ -17,10 +21,15 @@ const AdoptionForm = () => {
         breed: breed,
         color: color,
         image: image,
+        ...(formType === "missing" && {lastSeenLocation, DateLastSeen})
       };
+
+      const endpoint = formType === "adoption" 
+      ? "http://localhost:5501/pets"
+      : "http://localhost:5501/report";
   
       try {
-        const response = await fetch("http://localhost:5501/pets", {
+        const response = await fetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json", // Tell the server that we're sending JSON data
@@ -29,12 +38,15 @@ const AdoptionForm = () => {
         });
   
         if (response.ok) {
-          alert("Pet added successfully!");
+          alert(`${formType === "adoption" ? "Pet added for adoption!" : "Missing pet reported!"}`);
+          // makes alert dynamic to which form we are submitting
           // Reset form fields after a successful submission
           setName('');
           setBreed('');
           setColor('');
           setImage('');
+          setLastSeenLocation('')
+          setDateLastSeen ('')
           
         } else {
           alert("Error adding pet. Please try again.");
@@ -46,6 +58,20 @@ const AdoptionForm = () => {
     };
   
     return (
+      <div>
+      {/* Toggle between adoption and missing pet form */}
+      <div>
+        <label htmlFor="formType">Form Type:</label>
+        <select
+          id="formType"
+          value={formType}
+          onChange={(e) => setFormType(e.target.value)}
+        >
+          <option value="adoption">Adoption</option>
+          <option value="missing">Missing</option>
+        </select>
+      </div>
+
       <form className="petInfo" onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>
         <input
@@ -78,11 +104,31 @@ const AdoptionForm = () => {
           value={image}
           onChange={(e) => setImage(e.target.value)} // Update state as the user types
         />
+         {formType === "missing" && (
+          <>
+            <label htmlFor="lastSeenLocation">Last Seen Location</label>
+            <input
+              id="lastSeenLocation"
+              type="text"
+              value={lastSeenLocation}
+              onChange={(e) => setLastSeenLocation(e.target.value)} // Update state as the user types, only for missing
+            />
+
+            <label htmlFor="dateLastSeen">Date Last Seen</label>
+            <input
+              id="dateLastSeen"
+              type="date"
+              value={dateLastSeen}
+              onChange={(e) => setDateLastSeen(e.target.value)} // Update state as the user types, only for missing
+            />
+          </>
+        )}
   
         <input type="submit" value="Submit" />
       </form>
+      </div>
     );
   };
   
-  export default AdoptionForm;
+  export default PetForm;
   

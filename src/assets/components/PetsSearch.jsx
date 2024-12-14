@@ -15,19 +15,6 @@ function PetSearch({ onSearch }) {
              placeholder="Find a Pet"/>
       <button type="submit">Search</button>
 
-      {/* <label htmlFor="breed">Breed</label>
-      <input id="breed" type="text" value={input}
-      onChange={(event) => setInput(event.target.value)}/>
-
-      <label htmlFor="color">Color</label>
-      <input id="color" type="text" value={input}
-      onChange={(event) => setInput(event.target.value)}/>
-
-      <label htmlFor="image">Picture</label>
-      <input id="image" type="text" value={input}
-      onChange={(event) => setInput(event.target.value)}/>
-
-      <input type="submit" value="Relinquish"/> */}
     </form>
     )
 }
