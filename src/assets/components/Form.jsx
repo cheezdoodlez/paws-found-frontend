@@ -54,7 +54,7 @@ const PetForm = () => {
           setName(''); //This resets the name field to an empty string
           setBreed(''); //This resets the breed field to an empty string
           setColor(''); //This resets the color field to an empty string
-          setImage(''); //This resets the image field to an empty string
+          setImages(''); //This resets the image field to an empty string
           setLastSeenLocation('') //This resets the lastSeenLocation field to an empty string
           setDateLastSeen ('')  //This resets the dateLastSeen field to an empty string
 
