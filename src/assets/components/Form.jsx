@@ -7,7 +7,7 @@ const PetForm = () => {
     const [name, setName] = useState("");
     const [breed, setBreed] = useState("");
     const [color, setColor] = useState("");
-    const [image, setImage] = useState("");
+    const [image, setImages] = useState("");
     const [lastSeenLocation, setLastSeenLocation] = useState("")
     const [dateLastSeen, setDateLastSeen] = useState("")
   
@@ -19,7 +19,7 @@ const PetForm = () => {
         name: name,
         breed: breed,
         color: color,
-        image: image,
+        images: images,
         ...(formType === "missing" && {lastSeenLocation, DateLastSeen})
       };
 
@@ -43,7 +43,7 @@ const PetForm = () => {
           setName('');
           setBreed('');
           setColor('');
-          setImage('');
+          setImages('');
           setLastSeenLocation('')
           setDateLastSeen ('')
           
@@ -100,8 +100,8 @@ const PetForm = () => {
         <input
           id="image"
           type="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)} // Update state as the user types
+          value={images}
+          onChange={(e) => setImages(e.target.value)} // Update state as the user types
         />
          {formType === "missing" && (
           <>
