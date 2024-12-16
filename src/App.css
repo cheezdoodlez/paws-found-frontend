@@ -12,6 +12,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 50px;
+}
+.Username {
+  border: 3px solid white;
+  width: fit-content;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px;
 }
 
 .petReq {

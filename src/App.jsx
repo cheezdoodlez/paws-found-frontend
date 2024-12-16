@@ -2,16 +2,16 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { findPets, test } from './assets/services/Pets'
 import './App.css'
-import PetSearch from './assets/components/PetsSearch'
 import PetForm from './assets/components/Form'
+import PetDisplayPage from './assets/components/PetDisplay'
+import SignupForm from './assets/components/User'
 
 
 const App = () => {
-  const onSearch = (query) => findPets(query)
+  // const onSearch = (query) => findPets(query)
 
   return (
     <>
-    <PetSearch onSearch={onSearch}/>
         <button onClick={test}>Test me</button>
       <h1>Paws and Found</h1>
       <h2>Did you lose your pet? <br />
@@ -19,7 +19,9 @@ const App = () => {
       </h2>
     <div>
       <h1>Adoption Form</h1>
-    <AdoptionForm/>
+    <SignupForm/>
+    <PetForm/>
+    <PetDisplayPage/>
     </div>
 
       </>)
@@ -27,6 +29,7 @@ const App = () => {
 }
 
 
-      //will start making forms when we have more structure for backend
-      // toggling between lists for indexing data
+    
+       // Picture property not displaying in app//
+       //update search functionality
       export default App
