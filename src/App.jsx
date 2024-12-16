@@ -17,16 +17,17 @@ import LoginForm from './assets/components/User'
 const App = () => {
       const onSearch = (query) => findPets(query);
 
-      return (
+      
+        
+
+  return (
+    
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
 
             {/* Navbar Section */}
             <Navbar />
-
-  return (
-    <>
         <button onClick={test}>Test me</button>
       <h1>Paws and Found</h1>
       <h2>Did you lose your pet? <br />
@@ -107,5 +108,6 @@ const App = () => {
         </ThemeProvider>
       );
     };
+
 
     export default App;
