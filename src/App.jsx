@@ -3,9 +3,9 @@ import axios from 'axios'
 import { findPets, test } from './assets/services/Pets'
 import PetForm from './assets/components/Form'
 import PetDisplayPage from './assets/components/PetDisplay'
-import SignupForm from './assets/components/User'
-import Navbar from './assets/components/Navbar'
-import theme from './theme'
+import LoginForm from './assets/components/User'
+
+
 const App = () => {
   // const onSearch = (query) => findPets(query)
 
@@ -18,8 +18,9 @@ const App = () => {
       </h2>
     <div>
       <h1>Adoption Form</h1>
-    <SignupForm/>
+    <LoginForm>
     <PetForm/>
+    </LoginForm>
     <PetDisplayPage/>
     </div>
 
