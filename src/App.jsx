@@ -7,7 +7,6 @@ import { findPets, test } from './assets/services/Pets'
 import PetForm from './assets/components/Form'
 import PetDisplayPage from './assets/components/PetDisplay'
 
-import SignupForm from './assets/components/User'
 import PetSearch from './assets/components/PetsSearch'
 import ContactForm from './assets/components/Contact'
 
@@ -17,28 +16,29 @@ import LoginForm from './assets/components/User'
 const App = () => {
       const onSearch = (query) => findPets(query);
 
-      return (
-            <ThemeProvider theme={theme}>
-                  <CssBaseline />
 
 
-                  {/* Navbar Section */}
-                  <Navbar />
 
-                  return (
-                  <>
-                        <button onClick={test}>Test me</button>
-                        <h1>Paws and Found</h1>
-                        <h2>Did you lose your pet? <br />
-                              Did you find a pet? <br />
-                        </h2>
-                        <div>
-                              <h1>Adoption Form</h1>
-                              <LoginForm>
-                                    <PetForm />
-                              </LoginForm>
-                              <PetDisplayPage />
-                        </div>
+  return (
+
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+
+
+            {/* Navbar Section */}
+            <Navbar />
+        <button onClick={test}>Test me</button>
+      <h1>Paws and Found</h1>
+      <h2>Did you lose your pet? <br />
+        Did you find a pet? <br />
+      </h2>
+    <div>
+      <h1>Adoption Form</h1>
+    <LoginForm>
+    <PetForm/>
+    </LoginForm>
+    <PetDisplayPage/>
+    </div>
 
 
                         {/* Contact Form Section */}
@@ -108,4 +108,5 @@ const App = () => {
                   );
     };
 
-                  export default App;
+
+    export default App;
