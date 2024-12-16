@@ -1,4 +1,4 @@
-const FIND_PETS= 'http://localhost:5501/pets'
+const BASE_URL= 'http://localhost:5501/pets'
 
 export async function findPets(query) {
 console.log(query)
@@ -6,7 +6,7 @@ console.log(query)
 
 }
 
- export const test = async () => {
-    const response = await fetch(FIND_PETS)
+ export const test = async () => {                                                                                      
+    const response = await fetch(BASE_URL)
     console.log(response.json())
 }
