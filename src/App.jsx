@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { findPets, test } from './assets/services/Pets'
-import './App.css'
 import PetForm from './assets/components/Form'
 import PetDisplayPage from './assets/components/PetDisplay'
-import LoginForm from './assets/components/User'
+
 
 
 const App = () => {
@@ -25,11 +24,11 @@ const App = () => {
     </div>
 
       </>)
-      
+
 }
 
 
-    
+
        // Picture property not displaying in app//
        //update search functionality
       export default App
