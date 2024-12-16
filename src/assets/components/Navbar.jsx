@@ -1,25 +1,25 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+import logo from "/src/assets/images/skinny_logo.png" // Replace with your actual logo path
 
-function Navbar() {
+const Navbar = () => {
   return (
-    <AppBar position="static">
+    <AppBar position="sticky" sx={{ backgroundColor: "#FF6BAE" }}>
       <Toolbar>
-        <Typography variant="h6" style={{ flexGrow: 1 }}>
-          My Website
-        </Typography>
-        <Button color="inherit" href="#home">
-          Home
-        </Button>
-        <Button color="inherit" href="#about">
-          About
-        </Button>
-        <Button color="inherit" href="#contact">
-          Contact
-        </Button>
+        {/* Logo and App Title */}
+        <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+          <img
+            src={logo}
+            alt="Paws & Found Logo"
+            style={{ height: "60px", marginRight: "10px" }}
+          />
+          <Typography variant="h6" fontWeight="bold">
+            Paws & Found
+          </Typography>
+        </Box>
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default Navbar;
