@@ -4,7 +4,7 @@ import { Box, TextField, Button, Select, MenuItem, Typography } from "@mui/mater
 
 const PetForm = () => {
 
-=======
+
     // Step 1: Declare state variables for each field
     const [formType, setFormType] = useState("adoption")
     const [name, setName] = useState("");
