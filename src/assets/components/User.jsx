@@ -1,68 +1,140 @@
 import React, {useState} from 'react'
 // import { useNavigate } from 'react-router-dom';
-const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const useAuth = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   const [error, setError] = useState(null);
-  // const navigate = useNavigate(); // For programmatic navigation
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    
+  // Login method
+  const login = async (username, password) => {
     try {
-      // Instead of creating a new user, we're now checking existing credentials
-      const response = await fetch("http://localhost:5501/users", {
+      const response = await fetch("http://localhost:5501/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ 
-          username, 
-          password 
-        }),
+          username: username, 
+          password: password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Store authentication token in local storage
-        localStorage.setItem('authToken', data.token);
-        
-        // Set user role or permissions
-        localStorage.setItem('userRole', data.role);
-        
-        // Navigate to a dashboard or admin page
-        navigate('/dashboard');
+        // Successful login
+        setIsLoggedIn(true);
+        setUserRole(data.role);
+        setError(null);
+        return { 
+          success: true, 
+          role: data.role 
+        };
       } else {
-        // Handle login failure
+        // Login failed
         setError(data.message || "Invalid credentials");
+        return { 
+          success: false, 
+          error: data.message 
+        };
       }
     } catch (error) {
       console.error("Login Error:", error);
-      setError("Something went wrong. Please try again.");
+      setError("Network error. Please try again.");
+      return { 
+        success: false, 
+        error: "Network error" 
+      };
     }
   };
 
+  // Logout method
+  const logout = () => {
+    setIsLoggedIn(false);
+    setUserRole(null);
+    setError(null);
+  };
+
+  return {
+    isLoggedIn,
+    userRole,
+    error,
+    login,
+    logout
+  };
+};
+
+// Authentication Component
+const LoginForm = ({ children }) => {
+  const auth = useAuth();
+
+  // Login Form Component 
+  const LoginForm = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      
+      const result = await auth.login(username, password);
+      
+      if (!result.success) {
+        // Error handling is managed by the useAuth hook
+        return;
+      }
+      
+      // Login successful (handled by useAuth state)
+    };
+
+    return (
+      <div className="login-container">
+        <form onSubmit={handleSubmit}>
+          <h2>Login</h2>
+          {auth.error && (
+            <div className="error-message">
+              {auth.error}
+            </div>
+          )}
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    );
+  };
+
+  // Render logic
+  const renderContent = () => {
+    // If not logged in, show login form
+    if (!auth.isLoggedIn) {
+      return <LoginForm />;
+    }
+
+    // If logged in, render children (passed components)
+    return (
+      <div>
+        {/* Optional: Add a logout button */}
+        <button onClick={auth.logout}>Logout</button>
+        {children}
+      </div>
+    );
+  };
+
+  // Provide authentication context to children
   return (
     <div>
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          required
-        />
-        <input
-          type="password"  // Changed from type="text" for security
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        {error && <p style={{color: 'red'}}>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
+      {renderContent()}
     </div>
   );
 };

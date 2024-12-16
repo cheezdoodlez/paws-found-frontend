@@ -3,7 +3,7 @@ import axios from 'axios'
 import { findPets, test } from './assets/services/Pets'
 import PetForm from './assets/components/Form'
 import PetDisplayPage from './assets/components/PetDisplay'
-
+import LoginForm from './assets/components/User'
 
 
 const App = () => {
@@ -18,8 +18,9 @@ const App = () => {
       </h2>
     <div>
       <h1>Adoption Form</h1>
-    <LoginForm/>
+    <LoginForm>
     <PetForm/>
+    </LoginForm>
     <PetDisplayPage/>
     </div>
 
