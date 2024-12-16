@@ -7,7 +7,7 @@ const PetForm = () => {
     const [name, setName] = useState("");
     const [breed, setBreed] = useState("");
     const [color, setColor] = useState("");
-    const [image, setImages] = useState("");
+    const [images, setImages] = useState("");
     const [lastSeenLocation, setLastSeenLocation] = useState("")
     const [dateLastSeen, setDateLastSeen] = useState("")
   

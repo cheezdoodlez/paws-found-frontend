@@ -1,62 +1,70 @@
 import React, {useState} from 'react'
+// import { useNavigate } from 'react-router-dom';
+const LoginForm = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  // const navigate = useNavigate(); // For programmatic navigation
 
-const SignupForm = () => {
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
-    const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent the default form submission behavior
+  const handleLogin = async (e) => {
+    e.preventDefault();
     
-        const userData = {
-          name: name,
-          password: password,
-        };
-    
-        try {
-          const response = await fetch("http://localhost:5501/users", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json", // Tell the server that we're sending JSON data
-            },
-            body: JSON.stringify(userData), // Send the data as a JSON string
-          });
-    
-          if (response.ok) {
-            alert("Sign up was sucessfull!");
-            // Reset form fields after a successful submission
-            
-          } else {
-            alert("Error signing up. Please try again.");
-          }
-        } catch (error) {
-          console.error("Error:", error);
-          alert("Something went wrong. Please try again.");
-        }
-      };
-    
-      return (
-        <form className="Username" onSubmit={handleSubmit}>
-          <label htmlFor="name">Username</label>
-          <input
-            id="Username"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)} // Update state as the user types
-          />
-    
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="text"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)} // Update state as the user types
-          />
-    
+    try {
+      // Instead of creating a new user, we're now checking existing credentials
+      const response = await fetch("http://localhost:5501/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          username, 
+          password 
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store authentication token in local storage
+        localStorage.setItem('authToken', data.token);
         
-    
-          <input type="submit" value="Submit" />
-        </form>
-      );
-  
-  }
-  
-  export default SignupForm;
+        // Set user role or permissions
+        localStorage.setItem('userRole', data.role);
+        
+        // Navigate to a dashboard or admin page
+        navigate('/dashboard');
+      } else {
+        // Handle login failure
+        setError(data.message || "Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      setError("Something went wrong. Please try again.");
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleLogin}>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
+          required
+        />
+        <input
+          type="password"  // Changed from type="text" for security
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+        />
+        {error && <p style={{color: 'red'}}>{error}</p>}
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
+};
+
+export default LoginForm;

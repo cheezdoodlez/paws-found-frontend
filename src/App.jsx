@@ -4,7 +4,7 @@ import { findPets, test } from './assets/services/Pets'
 import './App.css'
 import PetForm from './assets/components/Form'
 import PetDisplayPage from './assets/components/PetDisplay'
-import SignupForm from './assets/components/User'
+import LoginForm from './assets/components/User'
 
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
       </h2>
     <div>
       <h1>Adoption Form</h1>
-    <SignupForm/>
+    <LoginForm/>
     <PetForm/>
     <PetDisplayPage/>
     </div>
