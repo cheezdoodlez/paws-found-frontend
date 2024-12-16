@@ -134,7 +134,7 @@ const PetForm = () => {
         label="Image URL"
         variant="outlined"
         fullWidth
-        value={image}
+        value={images}
         onChange={(e) => setImage(e.target.value)}
       />
 
