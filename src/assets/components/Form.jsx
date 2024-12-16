@@ -3,15 +3,17 @@ import { Box, TextField, Button, Select, MenuItem, Typography } from "@mui/mater
 
 
 const PetForm = () => {
-    // Step 1: Declare state variables for each field //state variables are used to store the values of the form fields
-    const [formType, setFormType] = useState("adoption")  // This line of code says that the default formType is "adoption" and the setFormType function is used when it needs to be updated
-    const [name, setName] = useState("");                 // This is a state variable to track the name of the pet
-    const [breed, setBreed] = useState("");              // This is a state variable to track the breed of the pet
-    const [color, setColor] = useState("");             // This is a state variable to track the color of the pet
-    const [image, setImage] = useState("");         // This is a state variable to track the image URL of the pet
-    const [lastSeenLocation, setLastSeenLocation] = useState("");  // This is a state variable to track the last seen location of the missing pet
-    const [dateLastSeen, setDateLastSeen] = useState("");    // This is a state variable to track the date the pet was last seen
 
+=======
+    // Step 1: Declare state variables for each field
+    const [formType, setFormType] = useState("adoption")
+    const [name, setName] = useState("");
+    const [breed, setBreed] = useState("");
+    const [color, setColor] = useState("");
+    const [images, setImages] = useState("");
+    const [lastSeenLocation, setLastSeenLocation] = useState("")
+    const [dateLastSeen, setDateLastSeen] = useState("")
+  
     // Step 2: Handle form submission
     const handleSubmit = async (e) => {  // the handleSubmit function is an asynchronous function that takes an event object as an argument (e) and is triggered when the form is submitted (when the user clicks the submit button)
           e.preventDefault();   // This e.preventDefault() method prevents the default behavior of the form submission, which is to reload the page
