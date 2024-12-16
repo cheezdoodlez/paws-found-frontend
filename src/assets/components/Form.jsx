@@ -135,7 +135,7 @@ const PetForm = () => {
         variant="outlined"
         fullWidth
         value={images}
-        onChange={(e) => setImages(e.target.value)}
+        onChange={(e) => setImage(e.target.value)}
       />
 
       {/* Additional Fields for Missing Pets */}
