@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { findPets, test } from './assets/services/Pets'
-import './App.css'
 import PetForm from './assets/components/Form'
 import PetDisplayPage from './assets/components/PetDisplay'
 import SignupForm from './assets/components/User'
-
-
+import Navbar from './assets/components/Navbar'
+import theme from './theme'
 const App = () => {
   // const onSearch = (query) => findPets(query)
 
