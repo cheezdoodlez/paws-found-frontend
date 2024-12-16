@@ -35,9 +35,7 @@ const App = () => {
       </h2>
     <div>
       <h1>Adoption Form</h1>
-    <LoginForm>
-    <PetForm/>
-    </LoginForm>
+    
     <PetDisplayPage/>
     </div>
 
@@ -103,7 +101,9 @@ const App = () => {
             <Typography variant="h4" fontWeight="bold" gutterBottom>
               Adoption / Missing Pet Form
             </Typography>
-            <PetForm />
+            <LoginForm>
+                <PetForm/>
+                </LoginForm>
           </Box>
         </ThemeProvider>
       );
