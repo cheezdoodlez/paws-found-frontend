@@ -13,7 +13,7 @@ const PetForm = () => {
     const [images, setImages] = useState("");
     const [lastSeenLocation, setLastSeenLocation] = useState("")
     const [dateLastSeen, setDateLastSeen] = useState("")
-  
+
     // Step 2: Handle form submission
     const handleSubmit = async (e) => {  // the handleSubmit function is an asynchronous function that takes an event object as an argument (e) and is triggered when the form is submitted (when the user clicks the submit button)
           e.preventDefault();   // This e.preventDefault() method prevents the default behavior of the form submission, which is to reload the page
