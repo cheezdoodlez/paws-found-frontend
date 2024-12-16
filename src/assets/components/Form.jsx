@@ -1,134 +1,167 @@
-import { use } from 'react';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
+import { Box, TextField, Button, Select, MenuItem, Typography } from "@mui/material";
 
 
 const PetForm = () => {
-    // Step 1: Declare state variables for each field
-    const [formType, setFormType] = useState("adoption")
-    const [name, setName] = useState("");
-    const [breed, setBreed] = useState("");
-    const [color, setColor] = useState("");
-    const [image, setImage] = useState("");
-    const [lastSeenLocation, setLastSeenLocation] = useState("")
-    const [dateLastSeen, setDateLastSeen] = useState("")
-  
+    // Step 1: Declare state variables for each field //state variables are used to store the values of the form fields
+    const [formType, setFormType] = useState("adoption")  // This line of code says that the default formType is "adoption" and the setFormType function is used when it needs to be updated
+    const [name, setName] = useState("");                 // This is a state variable to track the name of the pet
+    const [breed, setBreed] = useState("");              // This is a state variable to track the breed of the pet
+    const [color, setColor] = useState("");             // This is a state variable to track the color of the pet
+    const [image, setImage] = useState("");         // This is a state variable to track the image URL of the pet
+    const [lastSeenLocation, setLastSeenLocation] = useState("");  // This is a state variable to track the last seen location of the missing pet
+    const [dateLastSeen, setDateLastSeen] = useState("");    // This is a state variable to track the date the pet was last seen
+
     // Step 2: Handle form submission
-    const handleSubmit = async (e) => {
-      e.preventDefault(); // Prevent the default form submission behavior
-  
-      const petData = {
+    const handleSubmit = async (e) => {  // the handleSubmit function is an asynchronous function that takes an event object as an argument (e) and is triggered when the form is submitted (when the user clicks the submit button)
+          e.preventDefault();   // This e.preventDefault() method prevents the default behavior of the form submission, which is to reload the page
+
+      const petData = { // This variable petData is an object that contains the data from the form fields (name, breed, color, image, lastSeenLocation, dateLastSeen)
         name: name,
         breed: breed,
         color: color,
         image: image,
-        ...(formType === "missing" && {lastSeenLocation, DateLastSeen})
+        ...(formType === "missing" && { lastSeenLocation, dateLastSeen})// This is a conditional spread operator that says if the default formType is "missing", then include the lastSeenLocation and dateLastSeen fields in the petData object
       };
 
-      const endpoint = formType === "adoption" 
-      ? "http://localhost:5501/pets"
-      : "http://localhost:5501/report";
-  
-      try {
-        const response = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Tell the server that we're sending JSON data
-          },
-          body: JSON.stringify(petData), // Send the data as a JSON string
+      const endpoint =
+        formType === 'adoption'// This is the variable that is used to determine the endpoint, also known as
+          ? "http://localhost:5501/pets"  // this will be the endpoint for the adoption form
+          : "http://localhost:5501/report";  // this will be the endpoint for the missing pet form
+
+      try { // this is a try...catch block to handle errors
+         const response = await fetch(endpoint, { // Creating a function to send data to the server using fetch API and async/await
+          method: "POST", //This is a POST request to send data to the server
+          headers: { // This tells the server that we are sending JSON data in the request body and not a form submission with key-value pairs like a query string or form data (application/x-www-form-urlencoded)
+            "Content-Type": "application/json"}, // This is the MIME type for JSON data (like text/html for HTML)
+          body: JSON.stringify(petData), //This is the data we are sending to the server. We need to convert the object to a JSON string
         });
-  
-        if (response.ok) {
-          alert(`${formType === "adoption" ? "Pet added for adoption!" : "Missing pet reported!"}`);
+
+        if (response.ok) { //This checks if the response status code is in the 200 range
+          alert(
+            `${formType === "adoption"
+               ? "Pet added for adoption!"
+               : "Missing pet reported!"
+              }`
+            );
           // makes alert dynamic to which form we are submitting
-          // Reset form fields after a successful submission
-          setName('');
-          setBreed('');
-          setColor('');
-          setImage('');
-          setLastSeenLocation('')
-          setDateLastSeen ('')
-          
-        } else {
-          alert("Error adding pet. Please try again.");
+
+          // Reset form fields
+          setName(''); //This resets the name field to an empty string
+          setBreed(''); //This resets the breed field to an empty string
+          setColor(''); //This resets the color field to an empty string
+          setImage(''); //This resets the image field to an empty string
+          setLastSeenLocation('') //This resets the lastSeenLocation field to an empty string
+          setDateLastSeen ('')  //This resets the dateLastSeen field to an empty string
+
+        } else { //This is for any other response status code that is not in the 200 range
+          alert("Error adding pet. Please try again."); //This is an alert message that tells the user if the submission was not successful
         }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Something went wrong. Please try again.");
+      } catch (error) {  //This is the catch block that handles any errors that occur in the try block
+        console.error("Error:", error); //This logs the error to the console
+        alert("Something went wrong. Please try again."); //This is an alert message that tells the user if there was an error
       }
     };
-  
-    return (
-      <div>
-      {/* Toggle between adoption and missing pet form */}
-      <div>
-        <label htmlFor="formType">Form Type:</label>
-        <select
-          id="formType"
+
+    return (  // Step 3: Create the form with input fields and a submit
+
+    <Box // This is a Box component from Material-UI that acts as a container for the form
+        component="form" //creates a form element which is used to collect user input
+        onSubmit={handleSubmit} //This is the event handler that triggers the handleSubmit function when the form is submitted
+        sx={{  //In MUI sx is a prop that allows you to style components using the theme object so this allows us to use the Material-UI theme to style the form
+        display: "flex",
+        flexDirection: "column", //
+        gap: 2,
+        padding: 3,
+        border: "1px solid #ddd",
+        borderRadius: 2,
+        maxwidth: 400,
+        margin: "auto",
+      }}
+    >
+    {   /* Form Title */}
+      <Typography variant="h5" textAlign="center">
+        {formType === "adoption" ? "Adoption Form" : "Missing Pet Form"}
+      </Typography>
+
+         {  /* Form Type Selector */}
+      {/* The following line of code creates a dropdown menu for selecting the form type */}
+      <Select
           value={formType}
           onChange={(e) => setFormType(e.target.value)}
-        >
-          <option value="adoption">Adoption</option>
-          <option value="missing">Missing</option>
-        </select>
-      </div>
+          fullWidth
+      >
+          {/* The following line of code creates the options for the dropdown menu */}
+          <MenuItem value="adoption">Adoption</MenuItem>
+          {/* The following line of code creates the options for the dropdown menu */}
+          <MenuItem value="missing">Missing</MenuItem>
+      </Select>
 
-      <form className="petInfo" onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
-        <input
-          id="name"
-          type="text"
+       {/* Name Input */}
+      {/* The following line of code creates an input field for the name of the pet */}
+      <TextField
+          label="Name"
+          variant="outlined"
           value={name}
-          onChange={(e) => setName(e.target.value)} // Update state as the user types
+          onChange={(e) => setName(e.target.value)}
+          fullWidth
         />
-  
-        <label htmlFor="breed">Breed</label>
-        <input
-          id="breed"
-          type="text"
-          value={breed}
-          onChange={(e) => setBreed(e.target.value)} // Update state as the user types
-        />
-  
-        <label htmlFor="color">Color</label>
-        <input
-          id="color"
-          type="text"
-          value={color}
-          onChange={(e) => setColor(e.target.value)} // Update state as the user types
-        />
-  
-        <label htmlFor="image">Picture</label>
-        <input
-          id="image"
-          type="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)} // Update state as the user types
-        />
-         {formType === "missing" && (
-          <>
-            <label htmlFor="lastSeenLocation">Last Seen Location</label>
-            <input
-              id="lastSeenLocation"
-              type="text"
-              value={lastSeenLocation}
-              onChange={(e) => setLastSeenLocation(e.target.value)} // Update state as the user types, only for missing
-            />
 
-            <label htmlFor="dateLastSeen">Date Last Seen</label>
-            <input
-              id="dateLastSeen"
-              type="date"
-              value={dateLastSeen}
-              onChange={(e) => setDateLastSeen(e.target.value)} // Update state as the user types, only for missing
-            />
-          </>
-        )}
-  
-        <input type="submit" value="Submit" />
-      </form>
-      </div>
-    );
-  };
-  
-  export default PetForm;
-  
+      {/* Breed Input */}
+      <TextField
+        label="Breed"
+        variant="outlined"
+        fullWidth
+        value={breed}
+        onChange={(e) => setBreed(e.target.value)}
+      />
+
+      {/* Color Input */}
+      <TextField
+        label="Color"
+        variant="outlined"
+        fullWidth
+        value={color}
+        onChange={(e) => setColor(e.target.value)}
+      />
+
+      {/* Image Input */}
+      <TextField
+        label="Image URL"
+        variant="outlined"
+        fullWidth
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+      />
+
+      {/* Additional Fields for Missing Pets */}
+      {formType === "missing" && (
+        <>
+          <TextField
+            label="Last Seen Location"
+            variant="outlined"
+            fullWidth
+            value={lastSeenLocation}
+            onChange={(e) => setLastSeenLocation(e.target.value)}
+          />
+          <TextField
+            label="Date Last Seen"
+            type="date"
+            variant="outlined"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            value={dateLastSeen}
+            onChange={(e) => setDateLastSeen(e.target.value)}
+          />
+        </>
+      )}
+
+      {/* Submit Button */}
+      <Button type="submit" variant="contained" color="primary" fullWidth>
+        Submit
+      </Button>
+    </Box>
+  );
+};
+
+export default PetForm;
