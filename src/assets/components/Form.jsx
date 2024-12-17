@@ -23,8 +23,8 @@ const PetForm = () => {
         breed: breed,
         color: color,
         images: images,
-        ...(formType === "missing" && {lastSeenLocation, DateLastSeen}),
-        image: image,
+        ...(formType === "missing" && {lastSeenLocation, dateLastSeen}),
+        images: images,
         ...(formType === "missing" && { lastSeenLocation, dateLastSeen})// This is a conditional spread operator that says if the default formType is "missing", then include the lastSeenLocation and dateLastSeen fields in the petData object
       };
 
@@ -135,7 +135,7 @@ const PetForm = () => {
         variant="outlined"
         fullWidth
         value={images}
-        onChange={(e) => setImage(e.target.value)}
+        onChange={(e) => setImages(e.target.value)}
       />
 
       {/* Additional Fields for Missing Pets */}
