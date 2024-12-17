@@ -17,11 +17,11 @@ import LoginForm from './assets/components/User'
 const App = () => {
       const onSearch = (query) => findPets(query);
 
-      
-        
+
+
 
   return (
-    
+
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
@@ -40,74 +40,74 @@ const App = () => {
     </div>
 
 
-             {/* Contact Form Section */}
-            <ContactForm />
+                        {/* Contact Form Section */}
+                        <ContactForm />
 
-            {/* Home Section */}
-          <Box
-            id="home"
-            sx={{
-              padding: "2rem",
-              textAlign: "center",
-              backgroundColor: "#f9f9f9", // Adds a light background
-              borderRadius: "8px",
-              marginBottom: "2rem",
-            }}
-          >
-            <Typography variant="h3" fontWeight="bold" gutterBottom>
-              Paws and Found
-            </Typography>
-            <Typography variant="h5" color="text.secondary" gutterBottom>
-              Did you lose your pet? <br />
-              Did you find a pet?
-            </Typography>
-          </Box>
+                        {/* Home Section */}
+                        <Box
+                              id="home"
+                              sx={{
+                                    padding: "2rem",
+                                    textAlign: "center",
+                                    backgroundColor: "#f9f9f9", // Adds a light background
+                                    borderRadius: "8px",
+                                    marginBottom: "2rem",
+                              }}
+                        >
+                              <Typography variant="h3" fontWeight="bold" gutterBottom>
+                                    Paws and Found
+                              </Typography>
+                              <Typography variant="h5" color="text.secondary" gutterBottom>
+                                    Did you lose your pet? <br />
+                                    Did you find a pet?
+                              </Typography>
+                        </Box>
 
-          {/* Pet Search Section */}
-          <Box
-            id="search"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginBottom: "2rem",
-            }}
-          >
-            <PetSearch onSearch={onSearch} />
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ marginTop: "1rem" }}
-              onClick={test}
-            >
-              Test me
-            </Button>
-          </Box>
+                        {/* Pet Search Section */}
+                        <Box
+                              id="search"
+                              sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    marginBottom: "2rem",
+                              }}
+                        >
+                              <PetSearch onSearch={onSearch} />
+                              <Button
+                                    variant="contained"
+                                    color="primary"
+                                    sx={{ marginTop: "1rem" }}
+                                    onClick={test}
+                              >
+                                    Test me
+                              </Button>
+                        </Box>
 
-          {/* Adoption / Missing Form Section */}
-          <Box
-            id="Adopt"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              padding: "2rem",
-              textAlign: "center",
-              backgroundColor: "#fff",
-              boxShadow: "0 4px 8px rgba(0,0,0,0.1)", // Adds a subtle shadow
-              borderRadius: "8px",
-            }}
-          >
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
-              Adoption / Missing Pet Form
-            </Typography>
-            <LoginForm>
+                        {/* Adoption / Missing Form Section */}
+                        <Box
+                              id="Adopt"
+                              sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    padding: "2rem",
+                                    textAlign: "center",
+                                    backgroundColor: "#fff",
+                                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)", // Adds a subtle shadow
+                                    borderRadius: "8px",
+                              }}
+                        >
+                              <Typography variant="h4" fontWeight="bold" gutterBottom>
+                                    Adoption / Missing Pet Form
+                              </Typography>
+                               <LoginForm>
                 <PetForm/>
                 </LoginForm>
-          </Box>
-        </ThemeProvider>
-      );
-    };
+                        </Box>
+                  </ThemeProvider>
+                  );
+
 
 
     export default App;
