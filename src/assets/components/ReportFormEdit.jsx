@@ -125,7 +125,7 @@ const ReportFormEdit = () => {
 
           <form onSubmit={handleSubmit}>
             <div>
-              <label>Name (comma-separated):</label>
+              <label>Name </label>
               <input
                 type="text"
                 name="name"
@@ -136,7 +136,7 @@ const ReportFormEdit = () => {
             </div>
 
             <div>
-              <label>Breed (comma-separated):</label>
+              <label>Breed </label>
               <input
                 type="text"
                 name="breed"
@@ -147,7 +147,7 @@ const ReportFormEdit = () => {
             </div>
 
             <div>
-              <label>Color (comma-separated):</label>
+              <label>Color</label>
               <input
                 type="text"
                 name="color"
@@ -158,7 +158,7 @@ const ReportFormEdit = () => {
             </div>
 
             <div>
-              <label>Images (comma-separated URLs):</label>
+              <label>Images </label>
               <input
                 type="text"
                 name="images"
@@ -168,7 +168,7 @@ const ReportFormEdit = () => {
             </div>
 
             <div>
-              <label>Last Location (comma-separated):</label>
+              <label>Last Location </label>
               <input
                 type="text"
                 name="lastLocation"
@@ -178,7 +178,7 @@ const ReportFormEdit = () => {
             </div>
 
             <div>
-              <label>Last Date Seen (comma-separated):</label>
+              <label>Last Date Seen </label>
               <input
                 type="text"
                 name="lastDateSeen"
