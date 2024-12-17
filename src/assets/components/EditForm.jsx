@@ -152,7 +152,7 @@ const EditPet = () => {
             </div>
 
             <div>
-              <label>Images (comma-separated URLs):</label>
+              <label>Images</label>
               <input
                 type="text"
                 name="images"
