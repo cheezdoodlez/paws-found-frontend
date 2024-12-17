@@ -103,10 +103,10 @@ const App = () => {
           Adoption / Missing Pet Form
         </Typography>
         <LoginForm>
-          {/* <PetForm /> */}
-          <EditForm /> 
+          <PetForm />
+          <EditForm />
             <ReportFormEdit />
-      
+
         </LoginForm>
       </Box>
     </ThemeProvider>
