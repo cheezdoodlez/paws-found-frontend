@@ -63,7 +63,7 @@ const useAuth = () => {
   };
 };
 
-// Authentication Component
+// Authentication Component children is used to render any content that is passed between the opening and closing tags of the LoginForm component.
 const LoginForm = ({ children }) => {
   const auth = useAuth();
 

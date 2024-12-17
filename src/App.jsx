@@ -12,7 +12,8 @@ import PetSearch from './assets/components/PetsSearch'
 import ContactForm from './assets/components/Contact'
 
 import LoginForm from './assets/components/User'
-
+import EditForm from './assets/components/EditForm';
+import ReportFormEdit from './assets/components/ReportFormEdit';
 
 const App = () => {
   const onSearch = (query) => findPets(query);
@@ -102,12 +103,14 @@ const App = () => {
           Adoption / Missing Pet Form
         </Typography>
         <LoginForm>
-          <PetForm />
+          {/* <PetForm /> */}
+          <EditForm /> 
+            <ReportFormEdit />
+      
         </LoginForm>
       </Box>
     </ThemeProvider>
   );
 }
-
 
 export default App;
