@@ -29,20 +29,10 @@ const App = () => {
 
       {/* Navbar Section */}
       <Navbar />
-      <button onClick={test}>Test me</button>
-      <h1>Paws and Found</h1>
-      <h2>Did you lose your pet? <br />
-        Did you find a pet? <br />
-      </h2>
-      <div>
-        <h1>Adoption Form</h1>
-
-        <PetDisplayPage />
-      </div>
+      
 
 
       {/* Contact Form Section */}
-      <ContactForm />
 
       {/* Home Section */}
       <Box
@@ -63,6 +53,9 @@ const App = () => {
           Did you find a pet?
         </Typography>
       </Box>
+        <div>
+          <PetDisplayPage />
+        </div>
 
       {/* Pet Search Section */}
       <Box
@@ -103,11 +96,12 @@ const App = () => {
           Adoption / Missing Pet Form
         </Typography>
         <LoginForm>
-          {/* <PetForm /> */}
+          <PetForm />
           <EditForm /> 
             <ReportFormEdit />
       
         </LoginForm>
+<ContactForm />
       </Box>
     </ThemeProvider>
   );
