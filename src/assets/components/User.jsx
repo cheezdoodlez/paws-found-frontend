@@ -13,8 +13,8 @@ const useAuth = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
-          username: username, 
+        body: JSON.stringify({
+          username: username,
           password: password }),
       });
 
@@ -25,24 +25,24 @@ const useAuth = () => {
         setIsLoggedIn(true);
         setUserRole(data.role);
         setError(null);
-        return { 
-          success: true, 
-          role: data.role 
+        return {
+          success: true,
+          role: data.role
         };
       } else {
         // Login failed
         setError(data.message || "Invalid credentials");
-        return { 
-          success: false, 
-          error: data.message 
+        return {
+          success: false,
+          error: data.message
         };
       }
     } catch (error) {
       console.error("Login Error:", error);
       setError("Network error. Please try again.");
-      return { 
-        success: false, 
-        error: "Network error" 
+      return {
+        success: false,
+        error: "Network error"
       };
     }
   };
@@ -67,21 +67,21 @@ const useAuth = () => {
 const LoginForm = ({ children }) => {
   const auth = useAuth();
 
-  // Login Form Component 
+  // Login Form Component
   const LoginForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-      
+
       const result = await auth.login(username, password);
-      
+
       if (!result.success) {
         // Error handling is managed by the useAuth hook
         return;
       }
-      
+
       // Login successful (handled by useAuth state)
     };
 

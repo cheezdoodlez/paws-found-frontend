@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PetCard from "./PetCard";
-import { Box, Typography, Grid, Button, Paper } from "@mui/material";
+import { Box, Typography, Button, Paper } from "@mui/material";
 import PetSearch from "./PetsSearch";
+import Grid from '@mui/material/Grid'; // Correct import
 
 const PetDisplayPage = () => {
   const [formType, setFormType] = useState("adoption");
@@ -66,6 +67,20 @@ const PetDisplayPage = () => {
 
   return (
     <Box p={3}>
+      {/* Logo Image Centered at the Top */}
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        mb={3} // Adds margin below the logo
+      >
+        <img
+          src="src/assets/images/logo.png" // Replace with your actual logo path
+          alt="Logo"
+          style={{ width: "950px", height: "auto" }} // Adjust size as needed
+        />
+      </Box>
+
       {/* Page Title */}
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         {formType === "adoption" ? "Adoptable Pets" : "Missing Pets"}

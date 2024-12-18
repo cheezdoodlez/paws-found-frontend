@@ -1,43 +1,68 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {
+  Box, // A container component for layout with padding/margins
+  Typography, // For text and headings
+  TextField, // Styled input fields
+  Button, // Styled buttons
+  Paper, // A card-like container with shadow
+  Grid, // Responsive grid layout
+  CircularProgress, // Loading spinner
+} from "@mui/material";
 
 const ReportFormEdit = () => {
-  // State to store the list of reports
+  /** =======================
+   * STATE DEFINITIONS
+   * ======================== */
+  // State to store the list of reports fetched from the backend
   const [reports, setReports] = useState([]);
-  // State to store the selected report (for editing)
+
+  // State to track the selected report being edited
   const [selectedReport, setSelectedReport] = useState(null);
-  // State to store the form data
+
+  // State to hold form data (name, breed, color, images, etc.)
   const [formData, setFormData] = useState({
-    name: [],
-    breed: [],
-    color: [],
-    images: [],
-    lastLocation: [],
-    lastDateSeen: [],
+    name: "",
+    breed: "",
+    color: "",
+    images: "",
+    lastLocation: "",
+    lastDateSeen: "",
   });
-  // State to manage loading and error status
+
+  // State to manage loading indicator while updating a report
   const [loading, setLoading] = useState(false);
+
+  // State to hold any error messages
   const [error, setError] = useState(null);
 
-  // Fetch the list of reports from the backend
+  /** =======================
+   * FETCH REPORTS FROM BACKEND
+   * ======================== */
   useEffect(() => {
+    // Function to fetch all reports from the server
     const fetchReports = async () => {
       try {
         const response = await axios.get("http://localhost:5501/report");
-        setReports(response.data);
+        setReports(response.data); // Update the reports state
       } catch (err) {
-        setError("Error fetching reports");
+        setError("Error fetching reports."); // Display an error if fetching fails
       }
     };
 
-    fetchReports();
+    fetchReports(); // Call the fetch function when the component mounts
   }, []);
 
-  // Handle report selection for editing
+  /** =======================
+   * HANDLE REPORT SELECTION
+   * ======================== */
   const handleSelectReport = (report) => {
-    setSelectedReport(report); // Set the selected report for editing
+    // Set the selected report for editing
+    setSelectedReport(report);
+
+    // Pre-fill the form fields with data from the selected report
     setFormData({
-      name: report.name.join(", "), // Convert array to comma-separated string
+      name: report.name.join(", "),
       breed: report.breed.join(", "),
       color: report.color.join(", "),
       images: report.images.join(", "),
@@ -46,152 +71,221 @@ const ReportFormEdit = () => {
     });
   };
 
-  // Handle input changes for the form fields
+  /** =======================
+   * HANDLE FORM INPUT CHANGES
+   * ======================== */
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target; // Destructure input name and value
     setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
+      ...prevData, // Copy the previous form data
+      [name]: value, // Update only the changed field
     }));
   };
 
-  // Handle image and other array inputs
-  const handleArrayInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value.split(",").map((item) => item.trim()),
-    }));
-  };
-
-  // Handle form submission (Update the report data)
+  /** =======================
+   * HANDLE FORM SUBMISSION
+   * ======================== */
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page reload on form submission
     if (!selectedReport) {
-      setError("No report selected for editing.");
+      setError("No report selected for editing."); // Ensure a report is selected
       return;
     }
 
-    setLoading(true);
-    setError(null);
+    setLoading(true); // Show loading spinner
+    setError(null); // Clear any previous errors
 
     try {
-      const response = await axios.put(
+      // Send an API request to update the selected report
+      await axios.put(
         `http://localhost:5501/report/${selectedReport._id}`,
         formData
       );
-      setLoading(false);
-      alert("Report updated successfully!");
-      setSelectedReport(null); // Reset selected report after successful update
+      setLoading(false); // Hide loading spinner
+      alert("Report updated successfully!"); // Notify the user of success
+
+      // Reset the selected report and form data
+      setSelectedReport(null);
       setFormData({
         name: "",
         breed: "",
         color: "",
-        images: [],
-        lastLocation: [],
-        lastDateSeen: [],
-      }); // Reset the form data
+        images: "",
+        lastLocation: "",
+        lastDateSeen: "",
+      });
     } catch (err) {
-      setLoading(false);
-      setError("Failed to update report data.");
+      setLoading(false); // Hide loading spinner
+      setError("Failed to update report."); // Display error message
     }
   };
 
+  /** =======================
+   * COMPONENT RETURN
+   * ======================== */
   return (
-    <div>
-      <h2>Edit Report Information</h2>
+    <Box p={3}>
+      {/* Main Page Title */}
+      <Typography variant="h4" fontWeight="bold" gutterBottom>
+        Edit Report Information
+      </Typography>
 
-      {/* List of Reports */}
-      <div>
-        <h3>Report List</h3>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <ul>
-          {reports.map((report) => (
-            <li key={report._id}>
-              {report.name.join(", ")} - {report.breed.join(", ")}
-              <button onClick={() => handleSelectReport(report)}>Edit</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Edit Form (only visible if a report is selected) */}
-      {selectedReport && (
-        <div>
-          <h3>Edit Report: {selectedReport.name.join(", ")}</h3>
-
-          {loading && <p>Updating report...</p>}
-          {error && <p style={{ color: "red" }}>{error}</p>}
-
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label>Name </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div>
-              <label>Breed </label>
-              <input
-                type="text"
-                name="breed"
-                value={formData.breed}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div>
-              <label>Color</label>
-              <input
-                type="text"
-                name="color"
-                value={formData.color}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div>
-              <label>Images </label>
-              <input
-                type="text"
-                name="images"
-                value={formData.images}
-                onChange={handleArrayInputChange}
-              />
-            </div>
-
-            <div>
-              <label>Last Location </label>
-              <input
-                type="text"
-                name="lastLocation"
-                value={formData.lastLocation}
-                onChange={handleArrayInputChange}
-              />
-            </div>
-
-            <div>
-              <label>Last Date Seen </label>
-              <input
-                type="text"
-                name="lastDateSeen"
-                value={formData.lastDateSeen}
-                onChange={handleArrayInputChange}
-              />
-            </div>
-
-            <button type="submit">Update Report</button>
-          </form>
-        </div>
+      {/* Display Error Messages */}
+      {error && (
+        <Typography color="error" gutterBottom>
+          {error}
+        </Typography>
       )}
-    </div>
+
+      {/* Main Grid Layout */}
+      <Grid container spacing={3}>
+        {/* LEFT COLUMN: List of Reports */}
+        <Grid item xs={12} md={6}>
+          {/* Section Title */}
+          <Typography variant="h5" gutterBottom>
+            Report List
+          </Typography>
+
+          {/* Container for the Report List */}
+          <Paper
+            elevation={3}
+            sx={{
+              p: 2,
+              maxWidth: "600px", // Limit the width of the list for better appearance
+              margin: "0 auto", // Center the list horizontally
+            }}
+          >
+            {reports.map((report) => (
+              <Box
+                key={report._id}
+                display="flex" // Align items in a row
+                alignItems="center" // Vertically center the content
+                justifyContent="space-between" // Space between text and button
+                mb={2} // Add margin below each item
+              >
+                {/* Report Details */}
+                <Typography variant="body1">
+                  {report.name.join(", ")} - {report.breed.join(", ")}
+                </Typography>
+
+                {/* Edit Button */}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={() => handleSelectReport(report)}
+                  sx={{
+                    textTransform: "none", // Prevent uppercase text
+                    borderRadius: "8px", // Rounded corners
+                  }}
+                >
+                  Edit
+                </Button>
+              </Box>
+            ))}
+          </Paper>
+        </Grid>
+
+        {/* RIGHT COLUMN: Edit Form */}
+        <Grid item xs={12} md={6}>
+          {/* Show the Edit Form Only When a Report is Selected */}
+          {selectedReport ? (
+            <Paper elevation={3} sx={{ p: 3 }}>
+              {/* Form Title */}
+              <Typography variant="h5" gutterBottom>
+                Editing: {selectedReport.name.join(", ")}
+              </Typography>
+
+              {/* Loading Indicator */}
+              {loading && <CircularProgress />}
+
+              {/* Edit Form */}
+              <form onSubmit={handleSubmit}>
+                {/* Input Field: Name */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+
+                {/* Input Field: Breed */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Breed"
+                  name="breed"
+                  value={formData.breed}
+                  onChange={handleInputChange}
+                  required
+                />
+
+                {/* Input Field: Color */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Color"
+                  name="color"
+                  value={formData.color}
+                  onChange={handleInputChange}
+                  required
+                />
+
+                {/* Input Field: Images */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Images (comma-separated)"
+                  name="images"
+                  value={formData.images}
+                  onChange={handleInputChange}
+                />
+
+                {/* Input Field: Last Location */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Last Location (comma-separated)"
+                  name="lastLocation"
+                  value={formData.lastLocation}
+                  onChange={handleInputChange}
+                />
+
+                {/* Input Field: Last Date Seen */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Last Date Seen (comma-separated)"
+                  name="lastDateSeen"
+                  value={formData.lastDateSeen}
+                  onChange={handleInputChange}
+                />
+
+                {/* Submit and Cancel Buttons */}
+                <Box mt={2}>
+                  <Button type="submit" variant="contained" color="primary">
+                    Update Report
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    sx={{ ml: 2 }}
+                    onClick={() => setSelectedReport(null)}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              </form>
+            </Paper>
+          ) : (
+            <Typography>Select a report to edit.</Typography>
+          )}
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
