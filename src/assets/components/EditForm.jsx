@@ -1,39 +1,56 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {
+  Box, // Container component for layout and spacing
+  Typography, // For headings and text
+  TextField, // Material-UI styled input fields
+  Button, // Styled button component
+  Paper, // Card-like container with shadow
+    CircularProgress, // Loading spinner
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import Grid from '@mui/material/Grid';
+
 
 const EditPet = () => {
-  // State to store the list of pets
-  const [pets, setPets] = useState([]);
-  // State to store the selected pet (for editing)
-  const [selectedPet, setSelectedPet] = useState(null);
-  // State to store the form data
+  /** =======================
+   * STATE DEFINITIONS
+   * ======================== */
+  const [pets, setPets] = useState([]); // State to store the list of pets
+  const [selectedPet, setSelectedPet] = useState(null); // State to store the pet being edited
   const [formData, setFormData] = useState({
     name: "",
     breed: "",
     color: "",
     images: [],
-  });
-  // State to manage loading and error status
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  }); // State for form input values
+  const [loading, setLoading] = useState(false); // Loading state for the update process
+  const [error, setError] = useState(null); // State for error messages
 
-  // Fetch the list of pets from the backend
+  /** =======================
+   * FETCH PETS FROM BACKEND
+   * ======================== */
   useEffect(() => {
     const fetchPets = async () => {
       try {
         const response = await axios.get("http://localhost:5501/pets");
         setPets(response.data);
       } catch (err) {
-        setError("Error fetching pets");
+        setError("Error fetching pets.");
       }
     };
 
     fetchPets();
   }, []);
 
-  // Handle pet selection for editing
+  /** =======================
+   * HANDLE EVENTS
+   * ======================== */
+  // Select a pet for editing and pre-fill the form
   const handleSelectPet = (pet) => {
-    setSelectedPet(pet); // Set the selected pet for editing
+    setSelectedPet(pet);
     setFormData({
       name: pet.name,
       breed: pet.breed,
@@ -42,7 +59,7 @@ const EditPet = () => {
     });
   };
 
-  // Handle input changes for the form fields
+  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -51,7 +68,7 @@ const EditPet = () => {
     }));
   };
 
-  // Handle image input changes
+  // Handle changes for the images field (comma-separated input)
   const handleImageChange = (e) => {
     const { value } = e.target;
     setFormData((prevData) => ({
@@ -60,7 +77,7 @@ const EditPet = () => {
     }));
   };
 
-  // Handle form submission (Update the pet data)
+  // Handle form submission to update the pet
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedPet) {
@@ -68,106 +85,175 @@ const EditPet = () => {
       return;
     }
 
-    setLoading(true);
-    setError(null);
+    setLoading(true); // Show loading spinner
+    setError(null); // Clear any previous errors
 
     try {
-      const response = await axios.put(
+      await axios.put(
         `http://localhost:5501/pets/${selectedPet._id}`,
         formData
       );
-      setLoading(false);
+      setLoading(false); // Hide loading spinner
       alert("Pet updated successfully!");
-      setSelectedPet(null); // Reset selected pet after successful update
+
+      // Reset form and selected pet
+      setSelectedPet(null);
       setFormData({
         name: "",
         breed: "",
         color: "",
         images: [],
-      }); // Reset the form data
+      });
     } catch (err) {
       setLoading(false);
       setError("Failed to update pet data.");
     }
   };
 
+  /** =======================
+   * COMPONENT RENDERING
+   * ======================== */
   return (
-    <div>
-      <h2>Edit Pet Information</h2>
+    <Box p={3}>
+      {/* Main Heading */}
+      <Typography variant="h4" fontWeight="bold" gutterBottom>
+        Edit Pet Information
+      </Typography>
 
-      {/* List of Pets */}
-      <div>
-        <h3>Pet List</h3>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <ul>
-          {pets.map((pet) => (
-            <li key={pet._id}>
-              {pet.name} - {pet.breed}
-              <button onClick={() => handleSelectPet(pet)}>Edit</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Edit Form (only visible if a pet is selected) */}
-      {selectedPet && (
-        <div>
-          <h3>Edit Pet: {selectedPet.name}</h3>
-
-          {loading && <p>Updating pet...</p>}
-          {error && <p style={{ color: "red" }}>{error}</p>}
-
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label>Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div>
-              <label>Breed:</label>
-              <input
-                type="text"
-                name="breed"
-                value={formData.breed}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div>
-              <label>Color:</label>
-              <input
-                type="text"
-                name="color"
-                value={formData.color}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div>
-              <label>Images</label>
-              <input
-                type="text"
-                name="images"
-                value={formData.images.join(", ")}
-                onChange={handleImageChange}
-              />
-            </div>
-
-            <button type="submit">Update Pet</button>
-          </form>
-        </div>
+      {/* Error Message */}
+      {error && (
+        <Typography color="error" gutterBottom>
+          {error}
+        </Typography>
       )}
-    </div>
+
+      <Grid container spacing={3}>
+        {/* LEFT COLUMN: Pet List */}
+        <Grid item xs={12} md={5}>
+          <Typography variant="h5" gutterBottom>
+            Pet List
+          </Typography>
+
+          <Paper elevation={3} sx={{ p: 2 }}>
+            <List>
+              {pets.map((pet) => (
+                <ListItem
+                  key={pet._id}
+                  divider
+                  secondaryAction={
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => handleSelectPet(pet)}
+                      sx={{
+                        textTransform: "none",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  }
+                >
+                  {/* Pet Name and Breed */}
+                  <ListItemText
+                    primary={pet.name}
+                    secondary={`Breed: ${pet.breed}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+
+        {/* RIGHT COLUMN: Edit Form */}
+        <Grid item xs={12} md={7}>
+          {selectedPet ? (
+            <Paper elevation={3} sx={{ p: 3 }}>
+              {/* Edit Form Title */}
+              <Typography variant="h5" gutterBottom>
+                Editing: {selectedPet.name}
+              </Typography>
+
+              {/* Loading Indicator */}
+              {loading && (
+                <Box display="flex" justifyContent="center" mb={2}>
+                  <CircularProgress />
+                </Box>
+              )}
+
+              {/* Edit Form */}
+              <form onSubmit={handleSubmit}>
+                {/* Name Field */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+
+                {/* Breed Field */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Breed"
+                  name="breed"
+                  value={formData.breed}
+                  onChange={handleInputChange}
+                  required
+                />
+
+                {/* Color Field */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Color"
+                  name="color"
+                  value={formData.color}
+                  onChange={handleInputChange}
+                  required
+                />
+
+                {/* Images Field */}
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Images (comma-separated)"
+                  name="images"
+                  value={formData.images.join(", ")}
+                  onChange={handleImageChange}
+                />
+
+                {/* Form Buttons */}
+                <Box mt={2}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{ mr: 2 }}
+                  >
+                    Update Pet
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => setSelectedPet(null)}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              </form>
+            </Paper>
+          ) : (
+            <Typography>Select a pet to edit.</Typography>
+          )}
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
 export default EditPet;
-

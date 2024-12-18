@@ -1,18 +1,19 @@
-import { useState, useEffect} from "react"
-import PetSearch from './PetsSearch'
-import PetCard from './PetCard'
+import React, { useState, useEffect } from "react";
+import PetCard from "./PetCard";
+import { Box, Typography, Button, Paper } from "@mui/material";
+import PetSearch from "./PetsSearch";
+import Grid from '@mui/material/Grid'; // Correct import
 
 const PetDisplayPage = () => {
-    const [formType, setFormType] = useState("adoption")
-    const [pets, setPets] = useState([])
-    const [filteredPets, setFilteredPets] = useState ([])
-    const [selectedPets, setSelectedPets] = useState (null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
+  const [formType, setFormType] = useState("adoption");
+  const [pets, setPets] = useState([]);
+  const [filteredPets, setFilteredPets] = useState([]);
+  const [selectedPet, setSelectedPet] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-
-// Step 2: Fetch data based on form type
-useEffect(() => {
+  // Fetch pets
+  useEffect(() => {
     const fetchPets = async () => {
       setLoading(true);
       setError(null);
@@ -24,12 +25,11 @@ useEffect(() => {
 
       try {
         const response = await fetch(endpoint);
-        if (!response.ok) {
-          throw new Error("Failed to fetch pet data");
-        }
+        if (!response.ok) throw new Error("Failed to fetch pet data");
+
         const data = await response.json();
-        setPets(data); // Update state with fetched data
-        setFilteredPets(data)
+        setPets(data);
+        setFilteredPets(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -38,137 +38,139 @@ useEffect(() => {
     };
 
     fetchPets();
-  }, [formType]); // Re-fetch data whenever formType changes
+  }, [formType]);
 
-
-   // Handle search
-   const handleSearch = (searchQuery) => {  
-    const query = searchQuery.toLowerCase();
-    const results = pets.filter((pet) => {
-      if (typeof pet.name === "string") {
-        return pet.name.toLowerCase().includes(query);
-      }
-      console.warn("Invalid pet object (missing or non-string name):", pet);
-      return false; // Exclude pets with invalid or missing names
-    });
-  
-    setFilteredPets(results); // Update the filtered list
-  }
-
+  // Handle pet selection
   const handleCardClick = (pet) => {
-    setSelectedPets(pet)
-  }
+    setSelectedPet(pet);
+  };
 
-  const handleBackToList = () => {
-    setSelectedPets(null)
-  }
-
+  // Handle deletion
   const handleDelete = async (petId) => {
     const endpoint =
       formType === "adoption"
-        ? `http://localhost:5501/pets/${petId}` // DELETE endpoint for adoption pets
-        : `http://localhost:5501/report/${petId}`; // DELETE endpoint for missing pets
+        ? `http://localhost:5501/pets/${petId}`
+        : `http://localhost:5501/report/${petId}`;
 
     try {
-      const response = await fetch(endpoint, {
-        method: "DELETE",
-      });
+      const response = await fetch(endpoint, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete pet");
 
-      if (!response.ok) {
-        throw new Error("Failed to relinquish pet.");
-      }
-
-      // Remove the deleted pet from state
-      setPets((prevPets) => prevPets.filter((pet) => pet.id !== petId));
-      setFilteredPets((prevFilteredPets) =>
-        prevFilteredPets.filter((pet) => pet.id !== petId)
-      );
-
-      // Return to the list view
-      alert("This pet has been claimed!");
-      setSelectedPets(null);
+      setPets((prev) => prev.filter((pet) => pet._id !== petId));
+      setFilteredPets((prev) => prev.filter((pet) => pet._id !== petId));
+      setSelectedPet(null);
+      alert("Pet has been deleted successfully.");
     } catch (err) {
-      alert(`Error deleting pet: ${err.message}`);
+      alert(`Error: ${err.message}`);
     }
   };
-  // Step 3: Render the data
+
   return (
-    <div>
-      {/* Toggle for adoption and missing pets */}
-      <div>
-        <label htmlFor="formType">View:</label>
-        <select
-          id="formType"
-          value={formType}
-          onChange={(e) => setFormType(e.target.value)}
-        >
-          <option value="adoption">Adoptable Pets</option>
-          <option value="missing">Missing Pets</option>
-        </select>
-      </div>
+    <Box p={3}>
+      {/* Logo Image Centered at the Top */}
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        mb={3} // Adds margin below the logo
+      >
+        <img
+          src="src/assets/images/logo.png" // Replace with your actual logo path
+          alt="Logo"
+          style={{ width: "950px", height: "auto" }} // Adjust size as needed
+        />
+      </Box>
 
+      {/* Page Title */}
+      <Typography variant="h4" fontWeight="bold" gutterBottom>
+        {formType === "adoption" ? "Adoptable Pets" : "Missing Pets"}
+      </Typography>
 
-      <PetSearch onSearch={handleSearch}/>
+      {/* Form Toggle */}
+      <select
+        value={formType}
+        onChange={(e) => setFormType(e.target.value)}
+        style={{ marginBottom: "1rem" }}
+      >
+        <option value="adoption">Adoptable Pets</option>
+        <option value="missing">Missing Pets</option>
+      </select>
 
-      {/* Loading and Error states */}
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
+      {/* Search */}
+      <PetSearch
+        onSearch={(query) =>
+          setFilteredPets(
+            pets.filter((pet) =>
+              pet.name.toLowerCase().includes(query.toLowerCase())
+            )
+          )
+        }
+      />
 
-      {/* Display pet data */}
-      {!loading && !error && (
-       <div>
-       {/* If a pet is selected, show detailed view */}
-       {selectedPets ? (
-         <div className="pet-details">
-           <button onClick={handleBackToList}>Back to List</button>
-           <h2>{selectedPets.name}</h2>
-           <img
-             src={selectedPets.image}
-             alt={selectedPets.name}
-             style={{ width: "300px", height: "300px", objectFit: "cover" }}
-           />
-           <p>
-             <strong>Breed:</strong> {selectedPets.breed}
-           </p>
-           <p>
-             <strong>Color:</strong> {selectedPets.color}
-           </p>
-           {formType === "missing" && (
-             <>
-               <p>
-                 <strong>Last Seen Location:</strong>{" "}
-                 {selectedPets.lastSeenLocation}
-               </p>
-               <p>
-                 <strong>Date Last Seen:</strong> {selectedPets.dateLastSeen}
-               </p>
-               <button onClick={() => handleDelete(selectedPets._id)}>
-                    Found
-                  </button>
-             </>
-           )}
-           {formType === "adoption" && (
-                <button onClick={() => handleDelete(selectedPets._id)}>
-                  Adopted
-                </button>
-              )}
-         </div>
-       ) : (
-         // Show grid of pet cards if no pet is selected
-         <div className="pet-list" style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
-           {filteredPets.map((pet, index) => (
-             <PetCard key={index} pet={pet} onClick={handleCardClick} />
-           ))}
-         </div>
-       )}
-     </div>
-   )}
- </div>
-);
+      {/* Loading/Error */}
+      {loading && <Typography>Loading...</Typography>}
+      {error && <Typography color="error">{error}</Typography>}
+
+      {/* Pet Display */}
+      {selectedPet ? (
+        <Paper elevation={4} sx={{ p: 3, borderRadius: 3 }}>
+          <Typography variant="h5" fontWeight="bold">
+            {selectedPet.name}
+          </Typography>
+          <img
+            src={selectedPet.image}
+            alt={selectedPet.name}
+            style={{
+              width: "100%",
+              height: "300px",
+              objectFit: "cover",
+              marginBottom: "1rem",
+              borderRadius: "8px",
+            }}
+          />
+          <Typography>Breed: {selectedPet.breed}</Typography>
+          <Typography>Color: {selectedPet.color}</Typography>
+          {formType === "missing" && (
+            <>
+              <Typography>
+                Last Seen Location: {selectedPet.lastSeenLocation}
+              </Typography>
+              <Typography>
+                Date Last Seen: {selectedPet.dateLastSeen}
+              </Typography>
+            </>
+          )}
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleDelete(selectedPet._id)}
+            sx={{ mt: 2 }}
+          >
+            {formType === "adoption" ? "Adopted" : "Delete"}
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => setSelectedPet(null)}
+            sx={{ mt: 2, ml: 2 }}
+          >
+            Back
+          </Button>
+        </Paper>
+      ) : (
+        <Grid container spacing={3}>
+          {filteredPets.map((pet) => (
+            <Grid item xs={12} sm={6} md={4} key={pet._id}>
+              <PetCard
+                pet={pet}
+                onClick={() => handleCardClick(pet)}
+                selected={selectedPet?._id === pet._id}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Box>
+  );
 };
 
-
-  export default PetDisplayPage
-
-
- 
+export default PetDisplayPage;
